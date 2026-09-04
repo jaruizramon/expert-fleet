@@ -4,9 +4,11 @@
 Per-project experts, generated in-session, stored on disk (storage is cheap),
 served by a deterministic no-GC Go core.
 
-The name is the architecture: a **Go** deterministic core (**expertd**) that
-watches a stack, slices per-project **expert** SLMs from a Qwen-derived 27B
-oracle, and routes a **fleet** of small models — on potato hardware.
+The name is the architecture: **expert-fleet** slices per-project **expert**
+SLMs from a Qwen-derived 27B oracle and routes a **fleet** of small models — on
+potato hardware. The engine itself is **gotato**: the deterministic Go core
+(code in `core/expertd`, binary `expertd`) that watches a stack and does the
+slicing.
 
 A dense 27B model reads ~17 GB of weights per token — a 2017 laptop delivers
 ~1.5 tok/s, a 15 GB box cannot run it at all (measured: OOM). This project
@@ -54,8 +56,8 @@ Also pending: the 27B as a local distillation oracle for the "extend" loop.
 
 ## Layout
 
-- `core/expertd` — the deterministic Go core (scan / detect / watch /
-  build / oracle / langs / stacks / serve) — no GC, no `:=`, stdlib only
+- `core/expertd` — **gotato**, the deterministic Go engine (scan / detect /
+  watch / build / oracle / langs / stacks / serve) — no GC, no `:=`, stdlib only
 - `core/gglora` — the GoTorch trainer: Go orchestration + hand-written
   AVX2 C kernels (cgo), windowed attention, gradient clipping, NaN abort
 - `bench/` — the 40 GB test bundle: setup, probe, A/B scoreboard, task set
