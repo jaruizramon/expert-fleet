@@ -1,11 +1,12 @@
-# GotatoQwen
+# expert-fleet
 
-**Go + potato + Qwen: slice a 27B-class LLM into stack-aware SLMs that run on
-potato hardware.** Per-project experts, generated in-session, stored on disk
-(storage is cheap), served by a deterministic no-GC Go core.
+**Slice a 27B-class LLM into stack-aware SLMs that run on potato hardware.**
+Per-project experts, generated in-session, stored on disk (storage is cheap),
+served by a deterministic no-GC Go core.
 
-The name is the architecture: a **Go**-based deterministic core running
-**Qwen**-derived SLM fleets on **potato** PCs.
+The name is the architecture: a **Go** deterministic core (**expertd**) that
+watches a stack, slices per-project **expert** SLMs from a Qwen-derived 27B
+oracle, and routes a **fleet** of small models — on potato hardware.
 
 A dense 27B model reads ~17 GB of weights per token — a 2017 laptop delivers
 ~1.5 tok/s, a 15 GB box cannot run it at all (measured: OOM). This project
